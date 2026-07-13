@@ -1,114 +1,102 @@
-<div align="center">
-  <img src="https://via.placeholder.com/150x150/0f172a/06b6d4?text=LOOP" alt="LOOP Logo" width="120" height="120" />
-  
-  # ♾️ Project LOOP
-  **AI Customer-Feedback Intelligence Platform**
-  
-  [![Frontend](https://img.shields.io/badge/Frontend-React%20%2B%20Vite-61DAFB?style=for-the-badge&logo=react&logoColor=black)]()
-  [![Styling](https://img.shields.io/badge/Styling-Tailwind%20CSS-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)]()
-  [![AI](https://img.shields.io/badge/AI-Claude%20Sonnet-8A2BE2?style=for-the-badge&logo=anthropic&logoColor=white)]()
-  [![Status](https://img.shields.io/badge/Status-In%20Development-F59E0B?style=for-the-badge)]()
-  
-  *Turn scattered customer feedback into a ranked, evidence-backed list of what to build next.*
-</div>
+# Project LOOP ── AI-Powered Customer Feedback Intelligence Platform
+
+Project LOOP is a premium, multi-tenant SaaS application built on the MERN stack. It leverages artificial intelligence to ingest, parse, classify, and analyze customer feedback logs, converting unstructured customer support tickets, chat logs, and emails into structured, actionable taxonomy nodes.
+
+The application features a modern dark-mode, glassmorphic neon cyberpunk visual interface built on React, Vite, and Tailwind CSS.
 
 ---
 
-## 📖 Table of Contents
-<details>
-<summary>Click to expand</summary>
+## 🚀 Key Features
 
-- [Overview](#-overview)
-- [The Problem & Solution](#-the-problem--solution)
-- [Core Features](#-core-features)
-- [UI & UX Design](#-ui--ux-design)
-- [Tech Stack](#-tech-stack)
-- [Architecture & AI Pipeline](#-architecture--ai-pipeline)
-- [Getting Started](#-getting-started)
-- [Team & Acknowledgments](#-team--acknowledgments)
-
-</details>
+* **Multi-Tenant Architecture**: Complete data isolation enforced across schemas. Every record (except workspaces themselves) points to a `workspaceId` tenant.
+* **Role-Based Access Control (RBAC)**: Enforced authorization flow allowing user roles (`ADMIN`, `ANALYST`, `VIEWER`) to have fine-grained database and router permissions.
+* **Neon Cyberpunk Interface**: Sleek dark UI utilizing frosted glass panels (`bg-gray-950`), glowing borders, and keyframe animations.
+* **AI Feedback Classification**: Integration stub prepared to process logs and classify sentiment, category, tags, and urgency utilizing Anthropic's Claude 3.5 Sonnet.
+* **Workspace Theme Customizer**: Real-time aesthetic presets and color configurations synchronized across workspace instances.
+* **Live SaaS Dashboard & Inbox**: Interactive graphs, status triages, and exportable data tables.
 
 ---
 
-## 🌍 Overview
-**Project LOOP** is a corporate-grade SaaS web application designed to help product and support teams make sense of the overwhelming amount of customer feedback they receive daily. 
+## 🛠️ Technology Stack
 
-By ingesting data from support tickets, app store reviews, surveys, and sales notes, LOOP utilizes advanced AI (Anthropic's Claude) to automatically classify sentiment, cluster topics into themes, detect emerging trends, and answer plain-English questions grounded entirely in real customer data. 
-
----
-
-## 🎯 The Problem & Solution
-
-| ❌ The Problem | ✅ The LOOP Solution |
-| :--- | :--- |
-| Teams are drowning in unstructured feedback spread across multiple platforms. | A single, centralized inbox that ingests feedback via single entry or bulk CSV uploads. |
-| No human has the time to read, tag, and synthesize hundreds of tickets a week. | The **LOOP Engine** automatically tags every item with sentiment scores and feature labels. |
-| Product decisions are often made based on "gut feeling" or the loudest voice in the room. | Quantitative, evidence-backed trend tracking and one-click Voice-of-Customer (VoC) report generation. |
+* **Frontend**: React (Vite), React Router, Tailwind CSS, Lucide Icons
+* **Backend**: Node.js, Express.js (ES Modules, CORS, Helmet, JSON web tokens, Bcrypt)
+* **Database**: MongoDB & Mongoose ORM
+* **AI Engine**: Anthropic Claude 3.5 Sonnet (API Integration)
 
 ---
 
-## ✨ Core Features
+## 📁 Repository Structure
 
-### 🏢 Multi-Tenant Security & Roles
-- **Absolute Data Isolation:** Workspaces are strictly separated; Company A can never access Company B's data.
-- **Role-Based Access Control (RBAC):** Granular permissions for `ADMIN`, `ANALYST`, and `VIEWER` roles.
-
-### 🧠 The Intelligence Pipeline
-- **Auto-Classification:** Instant AI tagging of sentiment and themes upon ingestion.
-- **Theme Clustering:** AI groups similar feedback and tracks volume spikes over time.
-- **Ask LOOP (RAG Q&A):** A semantic search chat interface. Ask questions like *"What are users saying about onboarding?"* and receive answers grounded strictly in retrieved feedback data.
-- **Automated VoC Reports:** Generate comprehensive weekly narrative digests ready for leadership review.
-
----
-
-## 🎨 UI & UX Design
-The platform features a highly polished, premium interface tailored for modern SaaS users:
-- **Aesthetic:** Deep dark mode featuring **glassmorphism** panels and **neon cyberpunk** accents (glowing borders, cyan and magenta data visual highlights).
-- **Navigation:** Streamlined, topic-based tab structure prioritizing user comprehension and speed over cluttered sidebars.
-- **Interactivity:** Floating designs, glassy cards, and responsive data tables.
-
----
-
-## 💻 Tech Stack
-
-### Frontend Architecture
-- **Framework:** React (via Vite)
-- **Styling:** Tailwind CSS (utility-first, responsive design)
-- **Data Visualization:** Recharts (interactive dashboards)
-- **Icons & UI:** Lucide React / Custom SVG
-
-### AI & Data Engine
-- **LLM:** Anthropic Claude API (`claude-sonnet`)
-- **Retrieval:** Vector Embeddings for Semantic Search (RAG)
-
-### Backend & Database
-- 🚧 **TBD:** *Pending final architecture approval from engineering mentor.*
+```text
+LOOP/
+├── client/                     # React Frontend Scaffolding
+│   ├── src/
+│   │   ├── components/         # Reusable layouts (Navbar, GlassPanel)
+│   │   ├── pages/              # App screens (Dashboard, Inbox, AskLOOP, Themes, Reports)
+│   │   └── App.jsx             # React router configuration
+│   ├── tailwind.config.js      # Neon cyberpunk theme color tokens
+│   └── postcss.config.js       # PostCSS compile plugins
+│
+└── server/                     # Node.js + Express Backend Scaffolding
+    ├── config/db.js            # MongoDB Mongoose configurations
+    ├── controllers/            # Registration, login, and tenant management
+    ├── middleware/             # Auth JWT validators & role checkers
+    ├── models/                 # Database Schemas (User, Workspace, Feedback, Theme)
+    ├── routes/                 # Express API endpoints
+    ├── scripts/seed.js         # Demo workspace and user seeding script
+    └── services/aiService.js   # Anthropic Claude classification setup
+```
 
 ---
 
-## ⚙️ Architecture & AI Pipeline
+## ⚙️ Quick Start Guide
 
-1. **Ingest:** Data enters via CSV or manual entry.
-2. **Classify:** The backend seamlessly calls the Claude API to return structured, validated JSON (sentiment, themes).
-3. **Embed:** Text is converted into vector embeddings for future semantic search.
-4. **Retrieve & Answer:** When a user queries "Ask LOOP", the system fetches the top-K relevant vectors and passes them to the AI to formulate a grounded response.
+### 1. Prerequisites
+Ensure you have the following installed locally:
+- [Node.js](https://nodejs.org/) (v18+)
+- [MongoDB](https://www.mongodb.com/) (running on default port `27017`)
 
 ---
 
-## 🚀 Getting Started
+### 2. Backend Setup
+1. Open a terminal and navigate to the backend directory:
+   ```bash
+   cd server
+   ```
+2. Install package dependencies:
+   ```bash
+   npm install
+   ```
+3. Configure the local environment:
+   - Copy `.env.example` to `.env`.
+   - Update `MONGO_URI`, `JWT_SECRET`, or `ANTHROPIC_API_KEY` (if active credentials are ready).
+4. Run the database seed script to generate sample accounts and feedback items:
+   ```bash
+   npm run seed
+   ```
+   *Seeded Accounts for Demo Workspace:*
+   - **Admin**: `shashank@projectloop.io` (Password: `password123`)
+   - **Analyst**: `sujal@projectloop.io` (Password: `password123`)
+5. Spin up the Express server:
+   ```bash
+   npm start
+   ```
+   *The server runs by default on `http://localhost:5000`.*
 
-*(Setup instructions will be populated once the backend architecture is finalized.)*
+---
 
-```bash
-# Clone the repository
-git clone [https://github.com/yourusername/project-loop.git](https://github.com/yourusername/project-loop.git)
-
-# Navigate to the frontend directory
-cd project-loop/client
-
-# Install dependencies
-npm install
-
-# Start the development server
-npm run dev
+### 3. Frontend Setup
+1. Open a new terminal and navigate to the frontend directory:
+   ```bash
+   cd client
+   ```
+2. Install package dependencies:
+   ```bash
+   npm install
+   ```
+3. Boot the local development server:
+   ```bash
+   npm run dev
+   ```
+   *The client dashboard opens on `http://localhost:5173` (or the next available port).*
