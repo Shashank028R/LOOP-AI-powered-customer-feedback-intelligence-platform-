@@ -8,17 +8,17 @@ export default {
     extend: {
       colors: {
         cyber: {
-          bg: '#030712',
-          card: 'rgba(17, 24, 39, 0.65)',
-          primary: '#c084fc', // neon purple
-          secondary: '#22d3ee', // neon cyan
-          accent: '#f43f5e', // neon rose
+          bg: '#050a18',
+          card: 'rgba(10, 17, 40, 0.45)',
+          primary: '#d4af37', // gold
+          secondary: '#ffffff', // white
+          accent: '#dfb76c', // light gold
         }
       },
       boxShadow: {
-        'neon-purple': '0 0 8px rgba(168, 85, 247, 0.35), 0 0 20px rgba(168, 85, 247, 0.15)',
-        'neon-cyan': '0 0 8px rgba(34, 211, 238, 0.35), 0 0 20px rgba(34, 211, 238, 0.15)',
-        'neon-pink': '0 0 8px rgba(244, 63, 94, 0.35), 0 0 20px rgba(244, 63, 94, 0.15)',
+        'neon-purple': '0 4px 20px -2px rgba(212, 175, 55, 0.15), 0 0 15px rgba(212, 175, 55, 0.08)',
+        'neon-cyan': '0 4px 20px -2px rgba(255, 255, 255, 0.1), 0 0 15px rgba(255, 255, 255, 0.05)',
+        'neon-pink': '0 4px 20px -2px rgba(223, 183, 108, 0.15), 0 0 15px rgba(223, 183, 108, 0.08)',
       }
     },
   },

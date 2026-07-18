@@ -10,15 +10,60 @@ const feedbackSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  channel: {
+    type: String,
+    enum: ['Support ticket', 'App store review', 'NPS survey', 'Sales call note', 'Community post'],
+    default: 'Support ticket',
+  },
+  sourceRef: {
+    type: String,
+    trim: true,
+  },
+  customerLabel: {
+    type: String,
+    trim: true,
+    default: 'General',
+  },
+  sentiment: {
+    type: String,
+    enum: ['POS', 'NEU', 'NEG'],
+    default: 'NEU',
+  },
+  sentimentScore: {
+    type: Number,
+    default: 0,
+  },
   status: {
     type: String,
-    enum: ['NEW', 'UNDER_REVIEW', 'PLANNED', 'COMPLETED'],
+    enum: ['NEW', 'REVIEWED', 'ACTIONED'],
     default: 'NEW',
   },
   category: {
     type: String,
     trim: true,
     default: 'General',
+  },
+  themes: [{
+    themeId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'AITheme',
+    },
+    confidence: {
+      type: Number,
+      default: 1.0,
+    }
+  }],
+  featureArea: {
+    type: String,
+    trim: true,
+  },
+  aiSummary: {
+    type: String,
+    trim: true,
+  },
+  embedding: {
+    type: [Number],
+    default: undefined,
   },
   userId: {
     type: mongoose.Schema.Types.ObjectId,

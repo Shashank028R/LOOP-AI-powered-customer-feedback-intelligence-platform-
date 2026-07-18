@@ -4,6 +4,12 @@ import helmet from 'helmet';
 import dotenv from 'dotenv';
 import connectDB from './config/db.js';
 import authRoutes from './routes/authRoutes.js';
+import feedbackRoutes from './routes/feedbackRoutes.js';
+import themeRoutes from './routes/themeRoutes.js';
+import workspaceRoutes from './routes/workspaceRoutes.js';
+import aiThemeRoutes from './routes/aiThemeRoutes.js';
+import insightsRoutes from './routes/insightsRoutes.js';
+import reportRoutes from './routes/reportRoutes.js';
 
 // Load environment variables
 dotenv.config();
@@ -20,6 +26,12 @@ app.use(express.json());
 
 // API Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/feedbacks', feedbackRoutes);
+app.use('/api/themes', themeRoutes);
+app.use('/api/workspace', workspaceRoutes);
+app.use('/api/ai-themes', aiThemeRoutes);
+app.use('/api/insights', insightsRoutes);
+app.use('/api/reports', reportRoutes);
 
 // Base route / health check
 app.get('/', (req, res) => {

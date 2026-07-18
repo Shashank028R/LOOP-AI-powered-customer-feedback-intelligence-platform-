@@ -2,7 +2,6 @@ import jwt from 'jsonwebtoken';
 import User from '../models/User.js';
 import Workspace from '../models/Workspace.js';
 
-// Helper to generate JWT Token
 const generateToken = (user) => {
   return jwt.sign(
     { id: user._id, role: user.role, workspaceId: user.workspaceId },
@@ -11,20 +10,15 @@ const generateToken = (user) => {
   );
 };
 
-// @desc    Register a new Workspace and Admin user
-// @route   POST /api/auth/register
-// @access  Public
 export const register = async (req, res) => {
   const { name, email, password, workspaceName, workspaceSlug } = req.body;
 
   try {
-    // 1. Check if user already exists
     const userExists = await User.findOne({ email });
     if (userExists) {
       return res.status(400).json({ success: false, message: 'User already exists' });
     }
 
-    // 2. Create Workspace
     const slug = workspaceSlug || workspaceName.toLowerCase().replace(/[^a-z0-9]+/g, '-');
     const workspaceExists = await Workspace.findOne({ slug });
     if (workspaceExists) {
@@ -36,11 +30,10 @@ export const register = async (req, res) => {
       slug
     });
 
-    // 3. Create Admin User for the Workspace
     const user = await User.create({
       name,
       email,
-      password, // Password will be hashed by Mongoose pre-save hook
+      password,
       role: 'ADMIN',
       workspaceId: workspace._id
     });
@@ -71,20 +64,15 @@ export const register = async (req, res) => {
   }
 };
 
-// @desc    Authenticate User & get token
-// @route   POST /api/auth/login
-// @access  Public
 export const login = async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    // Find user by email
     const user = await User.findOne({ email }).populate('workspaceId');
     if (!user) {
       return res.status(401).json({ success: false, message: 'Invalid email or password' });
     }
 
-    // Validate password
     const isMatch = await user.matchPassword(password);
     if (!isMatch) {
       return res.status(401).json({ success: false, message: 'Invalid email or password' });
@@ -112,9 +100,6 @@ export const login = async (req, res) => {
   }
 };
 
-// @desc    Get logged in user details
-// @route   GET /api/auth/me
-// @access  Private
 export const getMe = async (req, res) => {
   try {
     const user = await User.findById(req.user._id).populate('workspaceId');
