@@ -101,46 +101,49 @@ const Reports = () => {
     }
   };
 
+  // Helper to parse inline markdown styles like bold text (**bold**)
+  const parseInlineStyles = (text) => {
+    if (!text) return '';
+    const boldRegex = /\*\*(.*?)\*\*/g;
+    let match;
+    const elements = [];
+    let lastIndex = 0;
+
+    while ((match = boldRegex.exec(text)) !== null) {
+      if (match.index > lastIndex) {
+        elements.push(text.slice(lastIndex, match.index));
+      }
+      elements.push(<strong key={match.index} className="font-bold text-slate-100">{match[1]}</strong>);
+      lastIndex = boldRegex.lastIndex;
+    }
+    if (lastIndex < text.length) {
+      elements.push(text.slice(lastIndex));
+    }
+    return elements.length > 0 ? elements : text;
+  };
+
   // Simple Markdown Parser to render generated report nicely
   const renderMarkdown = (mdText) => {
     if (!mdText) return null;
     return mdText.split('\n').map((line, idx) => {
       const trimmed = line.trim();
       if (trimmed.startsWith('# ')) {
-        return <h1 key={idx} className="text-xl font-bold text-amber-400 mt-6 mb-3 tracking-wide">{trimmed.replace('# ', '')}</h1>;
+        return <h1 key={idx} className="text-xl font-bold text-amber-400 mt-6 mb-3 tracking-wide">{parseInlineStyles(trimmed.replace('# ', ''))}</h1>;
       }
       if (trimmed.startsWith('## ')) {
-        return <h2 key={idx} className="text-base font-bold text-slate-100 mt-5 mb-2.5 border-b border-white/5 pb-1">{trimmed.replace('## ', '')}</h2>;
+        return <h2 key={idx} className="text-base font-bold text-slate-100 mt-5 mb-2.5 border-b border-white/5 pb-1">{parseInlineStyles(trimmed.replace('## ', ''))}</h2>;
       }
       if (trimmed.startsWith('### ')) {
-        return <h3 key={idx} className="text-sm font-semibold text-slate-200 mt-4 mb-2">{trimmed.replace('### ', '')}</h3>;
+        return <h3 key={idx} className="text-sm font-semibold text-slate-200 mt-4 mb-2">{parseInlineStyles(trimmed.replace('### ', ''))}</h3>;
       }
       if (trimmed.startsWith('- ') || trimmed.startsWith('* ')) {
-        return <li key={idx} className="text-slate-300 ml-4 list-disc mb-1 leading-relaxed text-xs">{trimmed.replace(/^[-*]\s+/, '')}</li>;
+        return <li key={idx} className="text-slate-300 ml-4 list-disc mb-1 leading-relaxed text-xs">{parseInlineStyles(trimmed.replace(/^[-*]\s+/, ''))}</li>;
       }
       if (/^\d+\.\s+/.test(trimmed)) {
-        return <li key={idx} className="text-slate-300 ml-4 list-decimal mb-1 leading-relaxed text-xs">{trimmed.replace(/^\d+\.\s+/, '')}</li>;
+        return <li key={idx} className="text-slate-300 ml-4 list-decimal mb-1 leading-relaxed text-xs">{parseInlineStyles(trimmed.replace(/^\d+\.\s+/, ''))}</li>;
       }
       if (trimmed) {
-        // Handle bold parsing
-        let formatted = trimmed;
-        const boldRegex = /\*\*(.*?)\*\*/g;
-        let match;
-        const elements = [];
-        let lastIndex = 0;
-
-        while ((match = boldRegex.exec(trimmed)) !== null) {
-          if (match.index > lastIndex) {
-            elements.push(trimmed.slice(lastIndex, match.index));
-          }
-          elements.push(<strong key={match.index} className="font-bold text-slate-100">{match[1]}</strong>);
-          lastIndex = boldRegex.lastIndex;
-        }
-        if (lastIndex < trimmed.length) {
-          elements.push(trimmed.slice(lastIndex));
-        }
-
-        return <p key={idx} className="text-slate-300 mb-3 leading-relaxed text-xs">{elements.length > 0 ? elements : trimmed}</p>;
+        return <p key={idx} className="text-slate-300 mb-3 leading-relaxed text-xs">{parseInlineStyles(trimmed)}</p>;
       }
       return <div key={idx} className="h-3" />;
     });

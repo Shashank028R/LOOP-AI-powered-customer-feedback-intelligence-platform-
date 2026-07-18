@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import GlassPanel from '../components/GlassPanel';
 import { Palette, Check, RefreshCw, Eye, Sparkles } from 'lucide-react';
+import { useAuth, API_URL } from '../AuthContext';
 
 const Themes = () => {
+  const { token, user } = useAuth();
   const [activeTheme, setActiveTheme] = useState('royalgold');
   const [primaryColor, setPrimaryColor] = useState('#d4af37');
   const [secondaryColor, setSecondaryColor] = useState('#ffffff');
@@ -40,25 +42,31 @@ const Themes = () => {
 
   // Fetch active theme on mount
   useEffect(() => {
-    fetch('http://localhost:5050/api/themes')
-      .then(res => res.json())
-      .then(data => {
-        if (data.success && data.theme) {
-          setPrimaryColor(data.theme.primaryColor);
-          setSecondaryColor(data.theme.secondaryColor);
-          setBgColor(data.theme.backgroundColor);
-
-          // Attempt to match with preset themes
-          const match = themes.find(t => t.primary.toLowerCase() === data.theme.primaryColor.toLowerCase() && t.background.toLowerCase() === data.theme.backgroundColor.toLowerCase());
-          if (match) {
-            setActiveTheme(match.id);
-          } else {
-            setActiveTheme('custom');
-          }
+    if (token) {
+      fetch(`${API_URL}/themes`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
         }
       })
-      .catch(err => console.error('Error fetching theme page mount:', err));
-  }, []);
+        .then(res => res.json())
+        .then(data => {
+          if (data.success && data.theme) {
+            setPrimaryColor(data.theme.primaryColor);
+            setSecondaryColor(data.theme.secondaryColor);
+            setBgColor(data.theme.backgroundColor);
+
+            // Attempt to match with preset themes
+            const match = themes.find(t => t.primary.toLowerCase() === data.theme.primaryColor.toLowerCase() && t.background.toLowerCase() === data.theme.backgroundColor.toLowerCase());
+            if (match) {
+              setActiveTheme(match.id);
+            } else {
+              setActiveTheme('custom');
+            }
+          }
+        })
+        .catch(err => console.error('Error fetching theme page mount:', err));
+    }
+  }, [token]);
 
   // Set style variables in root
   const updateThemePreview = (primary, secondary, bg) => {
@@ -70,13 +78,19 @@ const Themes = () => {
   };
 
   const handleSaveTheme = () => {
+    if (user?.role !== 'ADMIN') {
+      alert('Error: Only workspace Administrators are authorized to override brand styling.');
+      return;
+    }
+
     const matchedPreset = themes.find(t => t.id === activeTheme);
     const themeName = matchedPreset ? matchedPreset.name : 'Custom Brand Theme';
 
-    fetch('http://localhost:5050/api/themes', {
+    fetch(`${API_URL}/themes`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
       },
       body: JSON.stringify({
         name: themeName,
@@ -238,9 +252,10 @@ const Themes = () => {
               </button>
               <button 
                 onClick={handleSaveTheme}
-                className="px-4 py-2 bg-amber-500 hover:bg-amber-600 text-gray-950 font-bold text-xs rounded-xl shadow-neon-purple transition-all hover:scale-102"
+                disabled={user?.role !== 'ADMIN'}
+                className="px-4 py-2 bg-amber-500 hover:bg-amber-600 disabled:opacity-50 disabled:cursor-not-allowed text-gray-950 font-bold text-xs rounded-xl shadow-neon-purple transition-all hover:scale-102"
               >
-                Save Palette Settings
+                {user?.role === 'ADMIN' ? 'Save Brand Configuration' : 'Admin View Only'}
               </button>
             </div>
           </GlassPanel>
